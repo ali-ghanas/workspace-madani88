@@ -10,6 +10,11 @@ Satu baris per keputusan penting, sesuai aturan §7.6 dokumen arsitektur.
 
 - **2026-09-11** — Verifikasi end-to-end pertama berhasil: Docker Desktop terpasang (butuh aktifkan virtualisasi CPU di BIOS + kernel WSL2 lewat `--web-download` karena Windows Update/Store bermasalah di komputer ini), `supabase start` jalan, 3 pengguna demo dibuat, login/tambah produk/satuan/harga diuji manual di browser. Ketemu & diperbaiki: trigger audit gagal untuk tabel tanpa kolom `id` (peran_izin dikeluarkan dari daftar audit), dan pesan error izin harga yang tadinya mentah dari Postgres RLS sekarang ramah pengguna. Isolasi RLS antar outlet & alur ajukan/pending terkonfirmasi bekerja.
 
+- **2026-09-11** — Modul Supplier, Pelanggan, Pegawai dibangun dengan pola sama seperti Produk. Perbaikan sekalian: kebijakan RLS `pegawai_write`/`update`/`dokumen_pegawai_*` diperketat supaya pemegang izin `pegawai.kelola` (administrator) hanya bisa mengelola pegawai di outlet yang ditugaskan ke mereka, bukan semua outlet — celah ini ketahuan sebelum sempat jadi bug produksi karena ditinjau ulang saat menulis modul Pegawai. Tombol "Nonaktifkan" ditarik jadi satu komponen bersama (`app/(dashboard)/NonaktifkanButton.tsx`) dipakai 4 modul, bukan disalin ulang.
+- **2026-09-11** — Pengingat STR/SIP (kriteria fase 1 §8) untuk increment ini berupa **badge di UI** (list & detail pegawai, ambang 60 hari) — bukan notifikasi otomatis (email/WhatsApp). Kanal notifikasi belum diputuskan owner; kalau nanti mau ditambah, `lib/dokumen-kedaluwarsa.ts` sudah punya logikanya, tinggal dipanggil dari cron/edge function.
+- **2026-09-11** — Field `file_path` di `dokumen_pegawai` ada di skema tapi belum ada UI upload file (belum ada keputusan soal Supabase Storage untuk dokumen pegawai). Untuk sekarang cukup catat nomor & tanggal kedaluwarsa.
+- **2026-09-11** — `pengguna_id` di tabel `pegawai` (tautan opsional ke akun login) belum diekspos di form — perlu UI pemilih akun pengguna yang belum dibangun. Bisa diisi manual lewat migrasi/SQL kalau dibutuhkan sebelum UI-nya ada.
+
 ## Keputusan terbuka dari dokumen (§9) — belum dijawab owner
 
 - T1: Apakah cabang baru berbeda kepemilikan dari Madani88? (menentukan jumlah entitas awal)

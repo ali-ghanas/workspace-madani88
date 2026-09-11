@@ -109,10 +109,13 @@ create policy penugasan_update on penugasan for update using (fn_is_owner()) wit
 create policy pegawai_select on pegawai for select
   using (fn_is_owner() or outlet_utama_id in (select fn_user_outlet_ids()));
 create policy pegawai_write on pegawai for insert
-  with check (fn_is_owner() or fn_has_izin('pegawai.kelola'));
+  with check (
+    fn_is_owner()
+    or (fn_has_izin('pegawai.kelola') and outlet_utama_id in (select fn_user_outlet_ids()))
+  );
 create policy pegawai_update on pegawai for update
-  using (fn_is_owner() or fn_has_izin('pegawai.kelola'))
-  with check (fn_is_owner() or fn_has_izin('pegawai.kelola'));
+  using (fn_is_owner() or (fn_has_izin('pegawai.kelola') and outlet_utama_id in (select fn_user_outlet_ids())))
+  with check (fn_is_owner() or (fn_has_izin('pegawai.kelola') and outlet_utama_id in (select fn_user_outlet_ids())));
 
 create policy dokumen_pegawai_select on dokumen_pegawai for select
   using (
@@ -120,10 +123,28 @@ create policy dokumen_pegawai_select on dokumen_pegawai for select
     or pegawai_id in (select id from pegawai where outlet_utama_id in (select fn_user_outlet_ids()))
   );
 create policy dokumen_pegawai_write on dokumen_pegawai for insert
-  with check (fn_is_owner() or fn_has_izin('pegawai.kelola'));
+  with check (
+    fn_is_owner()
+    or (
+      fn_has_izin('pegawai.kelola')
+      and pegawai_id in (select id from pegawai where outlet_utama_id in (select fn_user_outlet_ids()))
+    )
+  );
 create policy dokumen_pegawai_update on dokumen_pegawai for update
-  using (fn_is_owner() or fn_has_izin('pegawai.kelola'))
-  with check (fn_is_owner() or fn_has_izin('pegawai.kelola'));
+  using (
+    fn_is_owner()
+    or (
+      fn_has_izin('pegawai.kelola')
+      and pegawai_id in (select id from pegawai where outlet_utama_id in (select fn_user_outlet_ids()))
+    )
+  )
+  with check (
+    fn_is_owner()
+    or (
+      fn_has_izin('pegawai.kelola')
+      and pegawai_id in (select id from pegawai where outlet_utama_id in (select fn_user_outlet_ids()))
+    )
+  );
 
 -- produk: katalog dibaca semua pengguna aktif (lintas outlet); psikotropika/narkotika
 -- hanya APJ/owner (aturan kontrol §6.2), peran lain butuh izin produk.ajukan (ditandai pending)

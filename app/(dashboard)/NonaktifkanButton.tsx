@@ -2,15 +2,26 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { nonaktifkanProduk } from "../actions";
 
-export default function NonaktifkanButton({ produkId, statusAktif }: { produkId: string; statusAktif: boolean }) {
+export default function NonaktifkanButton({
+  id,
+  statusAktif,
+  action,
+  confirmText,
+  label = "Nonaktifkan",
+}: {
+  id: string;
+  statusAktif: boolean;
+  action: (id: string) => Promise<{ error?: string } | undefined>;
+  confirmText: string;
+  label?: string;
+}) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
   if (!statusAktif) {
-    return <span className="text-sm text-gray-400">Produk sudah nonaktif</span>;
+    return <span className="text-sm text-gray-400">Sudah nonaktif</span>;
   }
 
   return (
@@ -19,9 +30,9 @@ export default function NonaktifkanButton({ produkId, statusAktif }: { produkId:
         type="button"
         disabled={pending}
         onClick={() => {
-          if (!confirm("Nonaktifkan produk ini? Data & riwayat tetap tersimpan.")) return;
+          if (!confirm(confirmText)) return;
           startTransition(async () => {
-            const result = await nonaktifkanProduk(produkId);
+            const result = await action(id);
             if (result?.error) {
               setError(result.error);
             } else {
@@ -31,7 +42,7 @@ export default function NonaktifkanButton({ produkId, statusAktif }: { produkId:
         }}
         className="rounded border border-red-200 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
       >
-        {pending ? "Memproses..." : "Nonaktifkan produk"}
+        {pending ? "Memproses..." : label}
       </button>
       {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
     </div>

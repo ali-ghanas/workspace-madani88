@@ -8,8 +8,7 @@ Tumpukan: Next.js (App Router) + Supabase (Postgres, Auth, RLS) + Tailwind.
 
 ## Menjalankan secara lokal
 
-Prasyarat: Node.js (sudah terpasang), **Docker Desktop** (untuk Supabase lokal — belum terpasang,
-lihat [docker.com](https://www.docker.com/products/docker-desktop/)).
+Prasyarat: Node.js, Git, dan Docker Desktop (semua sudah terpasang & jalan di komputer dev ini).
 
 ```bash
 npm install
@@ -19,7 +18,7 @@ npx supabase start
 `supabase start` akan menampilkan `API URL` dan `anon key`. Salin `.env.local.example` menjadi
 `.env.local` lalu isi `NEXT_PUBLIC_SUPABASE_ANON_KEY` dengan nilai tersebut.
 
-Buat 3 pengguna demo (owner + 2 apoteker di 2 outlet berbeda, untuk uji isolasi RLS antar outlet):
+Buat pengguna demo (untuk uji isolasi RLS antar outlet & antar peran):
 
 ```bash
 $env:SUPABASE_SERVICE_ROLE_KEY = "<service_role key dari supabase status>"
@@ -32,9 +31,14 @@ Lalu jalankan app:
 npm run dev
 ```
 
-Buka [http://localhost:3000](http://localhost:3000), masuk dengan salah satu akun demo
-(`owner.demo@madani88.local` / `apoteker.grl@madani88.local` / `apoteker.ngy@madani88.local`,
-password `Demo1234!`).
+Buka [http://localhost:3000](http://localhost:3000). Password semua akun demo: `Demo1234!`.
+
+| Email | Peran | Outlet |
+|---|---|---|
+| `owner.demo@madani88.local` | Owner | semua |
+| `apoteker.grl@madani88.local` | Apoteker | GRL |
+| `apoteker.ngy@madani88.local` | Apoteker | NGY |
+| `admin.grl@madani88.local` | Administrator | GRL |
 
 ### Perubahan skema
 
@@ -57,5 +61,8 @@ yang jalan + `SUPABASE_ANON_KEY` di env — otomatis di-skip kalau belum ada.
 
 ## Status
 
-Increment pertama: fondasi (schema semua tabel, auth, RBAC/RLS per outlet, audit log) + modul
-Produk penuh. Belum tersambung ke akun Supabase/GitHub asli — lihat `docs/keputusan.md`.
+Fondasi (schema semua tabel, auth, RBAC/RLS per outlet, audit log) + modul Produk, Supplier,
+Pelanggan, dan Pegawai (termasuk badge pengingat dokumen STR/SIP kedaluwarsa). Diverifikasi
+end-to-end lawan Supabase lokal. Belum tersambung ke akun Supabase/GitHub asli, belum ada UI
+antrean persetujuan penuh, dan pengingat dokumen masih badge di UI (belum notifikasi otomatis)
+— lihat `docs/keputusan.md`.

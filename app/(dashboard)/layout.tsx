@@ -21,6 +21,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
             <Link href="/produk" className="text-sm text-gray-600 hover:text-gray-900">
               Produk
             </Link>
+            <Link href="/supplier" className="text-sm text-gray-600 hover:text-gray-900">
+              Supplier
+            </Link>
+            <Link href="/pelanggan" className="text-sm text-gray-600 hover:text-gray-900">
+              Pelanggan
+            </Link>
+            <Link href="/pegawai" className="text-sm text-gray-600 hover:text-gray-900">
+              Pegawai
+            </Link>
           </nav>
           <div className="flex items-center gap-3 text-sm text-gray-600">
             <span>

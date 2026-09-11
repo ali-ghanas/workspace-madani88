@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import ProdukForm from "../ProdukForm";
-import { ubahProduk } from "../actions";
+import { ubahProduk, nonaktifkanProduk } from "../actions";
 import SatuanForm from "./SatuanForm";
 import BarcodeForm from "./BarcodeForm";
 import HargaForm from "./HargaForm";
-import NonaktifkanButton from "./NonaktifkanButton";
+import NonaktifkanButton from "../../NonaktifkanButton";
 
 export default async function ProdukDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -113,7 +113,13 @@ export default async function ProdukDetailPage({ params }: { params: Promise<{ i
       </section>
 
       <section>
-        <NonaktifkanButton produkId={id} statusAktif={produk.status_aktif} />
+        <NonaktifkanButton
+          id={id}
+          statusAktif={produk.status_aktif}
+          action={nonaktifkanProduk}
+          confirmText="Nonaktifkan produk ini? Data & riwayat tetap tersimpan."
+          label="Nonaktifkan produk"
+        />
       </section>
     </div>
   );

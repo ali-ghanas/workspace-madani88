@@ -29,6 +29,7 @@ const demoUsers = [
   { email: "owner.demo@madani88.local", password: "Demo1234!", nama: "Owner Demo", peranKode: "owner", outletId: OUTLET_GRL },
   { email: "apoteker.grl@madani88.local", password: "Demo1234!", nama: "Apoteker Griya Legita", peranKode: "apoteker", outletId: OUTLET_GRL },
   { email: "apoteker.ngy@madani88.local", password: "Demo1234!", nama: "Apoteker Nagoya", peranKode: "apoteker", outletId: OUTLET_NGY },
+  { email: "admin.grl@madani88.local", password: "Demo1234!", nama: "Administrator Griya Legita", peranKode: "administrator", outletId: OUTLET_GRL },
 ];
 
 for (const u of demoUsers) {
