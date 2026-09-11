@@ -74,6 +74,28 @@ export async function nonaktifkanPegawai(pegawaiId: string) {
   return { error: undefined };
 }
 
+// Menautkan pegawai ke akun login (pengguna) — hanya Owner, karena membaca
+// daftar pengguna butuh fn_is_owner() (lihat RLS pengguna_select di 0008_rls.sql).
+export async function tautkanPengguna(
+  pegawaiId: string,
+  _prev: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  const sesi = await getSesiPengguna();
+  if (!sesi) redirect("/login");
+  if (!sesi.isOwner) return { error: "Hanya Owner yang bisa menautkan akun login." };
+
+  const penggunaId = String(formData.get("pengguna_id") ?? "") || null;
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("pegawai").update({ pengguna_id: penggunaId }).eq("id", pegawaiId);
+
+  if (error) return { error: error.message };
+
+  revalidatePath(`/pegawai/${pegawaiId}`);
+  return { error: undefined };
+}
+
 export async function tambahDokumen(pegawaiId: string, _prev: ActionState, formData: FormData): Promise<ActionState> {
   const sesi = await getSesiPengguna();
   if (!sesi) redirect("/login");

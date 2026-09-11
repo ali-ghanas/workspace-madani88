@@ -39,6 +39,7 @@ Buka [http://localhost:3000](http://localhost:3000). Password semua akun demo: `
 | `apoteker.grl@madani88.local` | Apoteker | GRL |
 | `apoteker.ngy@madani88.local` | Apoteker | NGY |
 | `admin.grl@madani88.local` | Administrator | GRL |
+| `apj.grl@madani88.local` | APJ | GRL |
 
 ### Perubahan skema
 
@@ -72,6 +73,5 @@ Supabase lokal — bukan cuma ditulis dan diasumsikan benar.
 - Master produk belum diimpor dari Farmacare (perlu file ekspornya dari owner)
 - Pengingat STR/SIP baru badge di UI, belum notifikasi email/WhatsApp otomatis
 - Backup & restore belum diuji di lingkungan Supabase hosting sungguhan (baru local dev)
-- Alur "ajukan" untuk harga jual (izin `harga.ajukan`, khusus APJ) belum ada UI-nya —
-  RLS sudah benar tapi belum ada APJ demo untuk diuji, dan belum ada halaman persetujuan
-  khusus harga (beda dari persetujuan produk)
+- ~~Alur "ajukan" untuk harga jual~~ — **sudah selesai**: APJ mengajukan (masuk status
+  "menunggu"), Owner menyetujui/menolak di `/persetujuan` (bagian "Persetujuan Harga")

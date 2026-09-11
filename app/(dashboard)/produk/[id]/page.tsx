@@ -23,7 +23,9 @@ export default async function ProdukDetailPage({ params }: { params: Promise<{ i
       supabase.from("barcode_produk").select("id, barcode").eq("produk_id", id).eq("status_aktif", true),
       supabase
         .from("harga_produk")
-        .select("id, harga, berlaku_mulai, outlet:outlet_id(kode, nama), satuan:satuan_produk_id(nama_satuan)")
+        .select(
+          "id, harga, berlaku_mulai, status_persetujuan, outlet:outlet_id(kode, nama), satuan:satuan_produk_id(nama_satuan)"
+        )
         .eq("produk_id", id)
         .order("berlaku_mulai", { ascending: false }),
       supabase.from("outlet").select("id, kode, nama").eq("status_aktif", true).order("kode"),
@@ -85,6 +87,7 @@ export default async function ProdukDetailPage({ params }: { params: Promise<{ i
               <th className="py-1 font-medium">Satuan</th>
               <th className="py-1 font-medium">Harga</th>
               <th className="py-1 font-medium">Berlaku mulai</th>
+              <th className="py-1 font-medium">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -97,12 +100,29 @@ export default async function ProdukDetailPage({ params }: { params: Promise<{ i
                   <td className="py-1">{satuan?.nama_satuan}</td>
                   <td className="py-1">Rp {Number(h.harga).toLocaleString("id-ID")}</td>
                   <td className="py-1">{h.berlaku_mulai}</td>
+                  <td className="py-1">
+                    {h.status_persetujuan === "pending" && (
+                      <span className="rounded-md bg-warning/10 px-1.5 py-0.5 text-xs font-medium text-warning">
+                        menunggu
+                      </span>
+                    )}
+                    {h.status_persetujuan === "ditolak" && (
+                      <span className="rounded-md bg-destructive/10 px-1.5 py-0.5 text-xs font-medium text-destructive">
+                        ditolak
+                      </span>
+                    )}
+                    {h.status_persetujuan === "disetujui" && (
+                      <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-xs font-medium text-primary">
+                        disetujui
+                      </span>
+                    )}
+                  </td>
                 </tr>
               );
             })}
             {(hargaList ?? []).length === 0 && (
               <tr>
-                <td colSpan={4} className="py-2 text-muted-foreground">
+                <td colSpan={5} className="py-2 text-muted-foreground">
                   Belum ada harga.
                 </td>
               </tr>

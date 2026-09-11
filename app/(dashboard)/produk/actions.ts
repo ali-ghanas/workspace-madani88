@@ -157,8 +157,9 @@ export async function tambahHarga(produkId: string, _prev: ActionState, formData
     return { error: "Outlet, satuan, harga, dan tanggal berlaku wajib diisi." };
   }
 
-  const bolehUbahHarga = sesi!.isOwner || punyaIzin(sesi!, "harga.ubah") || punyaIzin(sesi!, "harga.ajukan");
-  if (!bolehUbahHarga) {
+  const bolehLangsung = sesi!.isOwner || punyaIzin(sesi!, "harga.ubah");
+  const bolehAjukan = punyaIzin(sesi!, "harga.ajukan");
+  if (!bolehLangsung && !bolehAjukan) {
     return { error: "Anda tidak punya izin mengubah harga jual." };
   }
 
@@ -170,6 +171,7 @@ export async function tambahHarga(produkId: string, _prev: ActionState, formData
     harga,
     berlaku_mulai: berlakuMulai,
     dibuat_oleh: sesi!.penggunaId,
+    status_persetujuan: bolehLangsung ? "disetujui" : "pending",
   });
 
   if (error) {

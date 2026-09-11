@@ -1,10 +1,13 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getSesiPengguna } from "@/lib/auth/session";
 import { statusKedaluwarsa } from "@/lib/dokumen-kedaluwarsa";
 import PegawaiForm from "../PegawaiForm";
 import { ubahPegawai, nonaktifkanPegawai } from "../actions";
 import NonaktifkanButton from "../../NonaktifkanButton";
 import DokumenForm from "./DokumenForm";
+import TautkanPenggunaForm from "./TautkanPenggunaForm";
 
 const JENIS_LABEL: Record<string, string> = {
   ktp: "KTP",
@@ -23,9 +26,10 @@ const BADGE_KEDALUWARSA: Record<string, string> = {
 
 export default async function PegawaiDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const sesi = await getSesiPengguna();
   const supabase = await createClient();
 
-  const [{ data: pegawai }, { data: dokumenList }, { data: outletList }] = await Promise.all([
+  const [{ data: pegawai }, { data: dokumenList }, { data: outletList }, { data: penggunaList }] = await Promise.all([
     supabase.from("pegawai").select("*").eq("id", id).single(),
     supabase
       .from("dokumen_pegawai")
@@ -34,11 +38,15 @@ export default async function PegawaiDetailPage({ params }: { params: Promise<{ 
       .eq("status_aktif", true)
       .order("tanggal_kedaluwarsa"),
     supabase.from("outlet").select("id, kode, nama").eq("status_aktif", true).order("kode"),
+    sesi?.isOwner
+      ? supabase.from("pengguna").select("id, nama, email").eq("status_aktif", true).order("nama")
+      : Promise.resolve({ data: null }),
   ]);
 
   if (!pegawai) notFound();
 
   const outletOptions = (outletList ?? []).map((o) => ({ id: o.id, label: `${o.kode} — ${o.nama}` }));
+  const penggunaOptions = (penggunaList ?? []).map((p) => ({ id: p.id, label: `${p.nama} (${p.email})` }));
 
   return (
     <div className="space-y-6">
@@ -78,6 +86,24 @@ export default async function PegawaiDetailPage({ params }: { params: Promise<{ 
         </ul>
         <DokumenForm pegawaiId={id} />
       </section>
+
+      {sesi?.isOwner && (
+        <section className="rounded-xl border border-border bg-card p-5">
+          <h2 className="mb-2 text-sm font-semibold text-muted-foreground">Akun login</h2>
+          <p className="mb-2 text-xs text-muted-foreground">
+            Tautkan pegawai ini ke akun pengguna supaya bisa login. Belum ada akunnya?{" "}
+            <Link href="/pengguna/undang" className="text-primary hover:underline">
+              Undang pengguna baru
+            </Link>{" "}
+            dulu.
+          </p>
+          <TautkanPenggunaForm
+            pegawaiId={id}
+            penggunaOptions={penggunaOptions}
+            penggunaIdSaatIni={pegawai.pengguna_id}
+          />
+        </section>
+      )}
 
       <section>
         <NonaktifkanButton

@@ -70,3 +70,32 @@ export async function tolakProduk(produkId: string) {
   revalidatePath(`/produk/${produkId}`);
   return { error: undefined };
 }
+
+// Harga diajukan APJ sendiri (izin harga.ajukan) — beda dari pengajuan produk
+// oleh apoteker/administrator yang diperiksa APJ. Karena pengaju & penyetuju
+// akan jadi orang yang sama kalau dibuka untuk APJ, persetujuan harga khusus Owner.
+async function setujuiTolakHarga(hargaId: string, status: "disetujui" | "ditolak") {
+  const sesi = await getSesiPengguna();
+  if (!sesi) redirect("/login");
+  if (!sesi.isOwner) return { error: `Men${status === "disetujui" ? "yetujui" : "olak"} harga hanya bisa dilakukan Owner.` };
+
+  const supabase = await createClient();
+  const { data: harga } = await supabase.from("harga_produk").select("produk_id").eq("id", hargaId).single();
+
+  // fn_setujui_harga (security definer) yang menulis, bukan .update() biasa —
+  // harga_produk sengaja tidak punya policy RLS UPDATE (append-only).
+  const { error } = await supabase.rpc("fn_setujui_harga", { p_harga_id: hargaId, p_status: status });
+  if (error) return { error: error.message };
+
+  revalidatePath("/persetujuan");
+  if (harga) revalidatePath(`/produk/${harga.produk_id}`);
+  return { error: undefined };
+}
+
+export async function setujuiHarga(hargaId: string) {
+  return setujuiTolakHarga(hargaId, "disetujui");
+}
+
+export async function tolakHarga(hargaId: string) {
+  return setujuiTolakHarga(hargaId, "ditolak");
+}
