@@ -1,6 +1,6 @@
-// Dev-only: membuat 2 pengguna demo (via Supabase Auth admin API, sehingga
-// password ikut di-hash oleh GoTrue) lalu menugaskan masing-masing ke satu
-// outlet berbeda, untuk menguji isolasi RLS antar outlet (kriteria fase 1 §8).
+// Dev-only: membuat pengguna demo (via Supabase Auth admin API, sehingga
+// password ikut di-hash oleh GoTrue) lalu menugaskan masing-masing ke outlet
+// & peran tertentu, untuk menguji isolasi RLS antar outlet (kriteria fase 1 §8).
 //
 // Jalankan setelah `supabase start`:
 //   node scripts/seed-demo-users.mjs
@@ -24,13 +24,15 @@ const supabase = createClient(url, serviceRoleKey, {
 
 const OUTLET_GRL = "00000000-0000-0000-0000-000000000011";
 const OUTLET_NGY = "00000000-0000-0000-0000-000000000012";
+const OUTLET_KDA = "00000000-0000-0000-0000-000000000013";
 
 const demoUsers = [
   { email: "owner.demo@madani88.local", password: "Demo1234!", nama: "Owner Demo", peranKode: "owner", outletId: OUTLET_GRL },
-  { email: "apoteker.grl@madani88.local", password: "Demo1234!", nama: "Apoteker Griya Legita", peranKode: "apoteker", outletId: OUTLET_GRL },
+  { email: "apoteker.grl@madani88.local", password: "Demo1234!", nama: "Apoteker Greenland", peranKode: "apoteker", outletId: OUTLET_GRL },
   { email: "apoteker.ngy@madani88.local", password: "Demo1234!", nama: "Apoteker Nagoya", peranKode: "apoteker", outletId: OUTLET_NGY },
-  { email: "admin.grl@madani88.local", password: "Demo1234!", nama: "Administrator Griya Legita", peranKode: "administrator", outletId: OUTLET_GRL },
-  { email: "apj.grl@madani88.local", password: "Demo1234!", nama: "APJ Griya Legita", peranKode: "apj", outletId: OUTLET_GRL },
+  { email: "apoteker.kda@madani88.local", password: "Demo1234!", nama: "Apoteker KDA", peranKode: "apoteker", outletId: OUTLET_KDA },
+  { email: "admin.grl@madani88.local", password: "Demo1234!", nama: "Administrator Greenland", peranKode: "administrator", outletId: OUTLET_GRL },
+  { email: "apj.grl@madani88.local", password: "Demo1234!", nama: "APJ Greenland", peranKode: "apj", outletId: OUTLET_GRL },
 ];
 
 for (const u of demoUsers) {

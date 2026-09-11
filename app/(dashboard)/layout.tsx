@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getSesiPengguna, punyaIzin } from "@/lib/auth/session";
 import SignOutButton from "./SignOutButton";
@@ -36,9 +37,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <div className="flex min-h-screen">
       <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-sidebar md:flex">
         <div className="flex items-center gap-2 border-b border-border px-4 py-4">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-xs font-extrabold text-primary-foreground">
-            M88
-          </div>
+          <Image src="/icons/icon-mark.png" alt="" width={36} height={36} className="h-9 w-9 rounded-lg" />
           <div className="text-sm font-bold leading-tight">Workspace Madani88</div>
         </div>
         <SidebarNav items={navItems} className="flex-1 space-y-1 px-3 py-4" />
@@ -54,9 +53,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <div className="flex flex-1 flex-col">
         <header className="flex items-center justify-between border-b border-border bg-card px-4 py-3 md:hidden">
           <Link href="/produk" className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-[10px] font-extrabold text-primary-foreground">
-              M88
-            </div>
+            <Image src="/icons/icon-mark.png" alt="" width={28} height={28} className="h-7 w-7 rounded-md" />
             <span className="text-sm font-bold">Workspace Madani88</span>
           </Link>
           <SignOutButton />

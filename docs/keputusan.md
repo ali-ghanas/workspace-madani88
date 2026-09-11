@@ -27,6 +27,9 @@ Satu baris per keputusan penting, sesuai aturan §7.6 dokumen arsitektur.
 - **2026-09-11** — Pegawai sekarang bisa ditautkan ke akun pengguna (`pegawai.pengguna_id`) lewat halaman detail pegawai, khusus Owner (butuh baca tabel `pengguna` yang RLS-nya owner-only). Menutup celah §8 "semua pegawai punya akun" yang sebelumnya cuma bisa lewat SQL manual.
 - **2026-09-11** — Ditambah akun demo `apj.grl@madani88.local` (peran APJ, outlet GRL) khusus untuk menguji alur persetujuan harga di atas.
 
+- **2026-09-11** — Data outlet diganti dari nama demo ke nama asli: **Greenland (GRL)**, **Nagoya (NGY)**, **KDA** (outlet ketiga ditambahkan — sebelumnya cuma 2 di seed lokal). Entitas jadi "Apotek Madani88" tanpa NPWP placeholder palsu (dikosongkan, isi lewat UI nanti kalau sudah ada halaman pengaturan entitas). Akun demo APJ/administrator/apoteker ikut diberi nama sesuai outlet asli, ditambah `apoteker.kda@madani88.local`.
+- **2026-09-11** — Logo asli Apotek Madani88 (dari owner) dipasang: `public/logo.jpg` (banner penuh, dipakai di halaman login), `public/icons/icon-mark.png` (crop bagian ikon "AM88" saja, dipakai di sidebar & topbar mobile), `public/icons/icon-192.png` & `icon-512.png` (ikon PWA), dan `app/favicon.ico`. Crop ikon dibuat otomatis dari logo asli lewat System.Drawing (bukan tebak-tebak warna seperti placeholder sebelumnya).
+
 ## Keputusan terbuka dari dokumen (§9) — belum dijawab owner
 
 - T1: Apakah cabang baru berbeda kepemilikan dari Madani88? (menentukan jumlah entitas awal)

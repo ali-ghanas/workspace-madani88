@@ -1,6 +1,6 @@
 # Workspace Madani88
 
-Core system & master data untuk Madani88 (apotek multi-outlet). Lihat
+Core system & master data untuk Apotek Madani88 (3 outlet: Greenland, Nagoya, KDA). Lihat
 [docs/architecture/Arsitektur_Fase1_Workspace_Madani88.md](docs/architecture/Arsitektur_Fase1_Workspace_Madani88.md)
 untuk konteks & keputusan arsitektur, dan [docs/keputusan.md](docs/keputusan.md) untuk log keputusan.
 
@@ -36,10 +36,11 @@ Buka [http://localhost:3000](http://localhost:3000). Password semua akun demo: `
 | Email | Peran | Outlet |
 |---|---|---|
 | `owner.demo@madani88.local` | Owner | semua |
-| `apoteker.grl@madani88.local` | Apoteker | GRL |
-| `apoteker.ngy@madani88.local` | Apoteker | NGY |
-| `admin.grl@madani88.local` | Administrator | GRL |
-| `apj.grl@madani88.local` | APJ | GRL |
+| `apoteker.grl@madani88.local` | Apoteker | Greenland (GRL) |
+| `apoteker.ngy@madani88.local` | Apoteker | Nagoya (NGY) |
+| `apoteker.kda@madani88.local` | Apoteker | KDA |
+| `admin.grl@madani88.local` | Administrator | Greenland (GRL) |
+| `apj.grl@madani88.local` | APJ | Greenland (GRL) |
 
 ### Perubahan skema
 

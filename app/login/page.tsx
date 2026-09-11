@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -32,14 +33,9 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center px-4">
-      <div className="mb-6 flex flex-col items-center gap-2">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-lg font-extrabold text-primary-foreground">
-          M88
-        </div>
-        <div className="text-center">
-          <div className="text-lg font-bold leading-tight">Workspace Madani88</div>
-          <div className="text-xs text-muted-foreground">Core system &amp; master data</div>
-        </div>
+      <div className="mb-6 flex flex-col items-center gap-1">
+        <Image src="/logo.jpg" alt="Apotek Madani88" width={946} height={342} priority className="h-auto w-64" />
+        <div className="text-xs text-muted-foreground">Workspace — core system &amp; master data</div>
       </div>
 
       <form

@@ -37,10 +37,13 @@ select p.id, i.id from peran p, izin i
 where p.kode = 'administrator'
   and i.kode in ('produk.ajukan', 'pegawai.kelola', 'supplier.kelola');
 
--- Data demo untuk dev lokal (2 outlet, dipakai scripts/seed-demo-users.mjs untuk uji isolasi RLS antar outlet)
-insert into entitas (id, nama, npwp, status_aktif) values
-  ('00000000-0000-0000-0000-000000000001', 'PT Madani88 (Demo)', '00.000.000.0-000.000', true);
+-- Entitas & outlet asli Apotek Madani88 (NPWP & alamat masih kosong, isi lewat
+-- UI /pengaturan entitas nanti kalau sudah ada — sengaja tidak diisi placeholder
+-- palsu supaya tidak tampak seperti data resmi). 3 outlet: Greenland, Nagoya, KDA.
+insert into entitas (id, nama, status_aktif) values
+  ('00000000-0000-0000-0000-000000000001', 'Apotek Madani88', true);
 
 insert into outlet (id, entitas_id, kode, nama, status_aktif) values
-  ('00000000-0000-0000-0000-000000000011', '00000000-0000-0000-0000-000000000001', 'GRL', 'Outlet Griya Legita (Demo)', true),
-  ('00000000-0000-0000-0000-000000000012', '00000000-0000-0000-0000-000000000001', 'NGY', 'Outlet Nagoya (Demo)', true);
+  ('00000000-0000-0000-0000-000000000011', '00000000-0000-0000-0000-000000000001', 'GRL', 'Outlet Greenland', true),
+  ('00000000-0000-0000-0000-000000000012', '00000000-0000-0000-0000-000000000001', 'NGY', 'Outlet Nagoya', true),
+  ('00000000-0000-0000-0000-000000000013', '00000000-0000-0000-0000-000000000001', 'KDA', 'Outlet KDA', true);
