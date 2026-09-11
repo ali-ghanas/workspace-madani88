@@ -8,6 +8,8 @@ Satu baris per keputusan penting, sesuai aturan §7.6 dokumen arsitektur.
 - **2026-09-11** — Node.js LTS dan Git dipasang otomatis via `winget` di komputer pengembangan (bukan perubahan setting sistem, hanya instalasi tool standar). Docker Desktop **tidak** dipasang otomatis (butuh WSL2/Hyper-V + restart) — menunggu owner memasang sendiri.
 - **2026-09-11** — Alur "ajukan" (persetujuan) di §5 disederhanakan untuk increment pertama: skema `persetujuan` sudah dibuat, tapi UI antrean persetujuan penuh baru dibangun bersamaan modul kedua. Perubahan oleh peran non-owner untuk field yang butuh persetujuan ditandai `status_persetujuan = 'pending'` di baris terkait, belum masuk antrean UI.
 
+- **2026-09-11** — Verifikasi end-to-end pertama berhasil: Docker Desktop terpasang (butuh aktifkan virtualisasi CPU di BIOS + kernel WSL2 lewat `--web-download` karena Windows Update/Store bermasalah di komputer ini), `supabase start` jalan, 3 pengguna demo dibuat, login/tambah produk/satuan/harga diuji manual di browser. Ketemu & diperbaiki: trigger audit gagal untuk tabel tanpa kolom `id` (peran_izin dikeluarkan dari daftar audit), dan pesan error izin harga yang tadinya mentah dari Postgres RLS sekarang ramah pengguna. Isolasi RLS antar outlet & alur ajukan/pending terkonfirmasi bekerja.
+
 ## Keputusan terbuka dari dokumen (§9) — belum dijawab owner
 
 - T1: Apakah cabang baru berbeda kepemilikan dari Madani88? (menentukan jumlah entitas awal)
