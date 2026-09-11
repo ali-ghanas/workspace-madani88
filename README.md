@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Workspace Madani88
 
-## Getting Started
+Core system & master data untuk Madani88 (apotek multi-outlet). Lihat
+[docs/architecture/Arsitektur_Fase1_Workspace_Madani88.md](docs/architecture/Arsitektur_Fase1_Workspace_Madani88.md)
+untuk konteks & keputusan arsitektur, dan [docs/keputusan.md](docs/keputusan.md) untuk log keputusan.
 
-First, run the development server:
+Tumpukan: Next.js (App Router) + Supabase (Postgres, Auth, RLS) + Tailwind.
+
+## Menjalankan secara lokal
+
+Prasyarat: Node.js (sudah terpasang), **Docker Desktop** (untuk Supabase lokal — belum terpasang,
+lihat [docker.com](https://www.docker.com/products/docker-desktop/)).
+
+```bash
+npm install
+npx supabase start
+```
+
+`supabase start` akan menampilkan `API URL` dan `anon key`. Salin `.env.local.example` menjadi
+`.env.local` lalu isi `NEXT_PUBLIC_SUPABASE_ANON_KEY` dengan nilai tersebut.
+
+Buat 3 pengguna demo (owner + 2 apoteker di 2 outlet berbeda, untuk uji isolasi RLS antar outlet):
+
+```bash
+$env:SUPABASE_SERVICE_ROLE_KEY = "<service_role key dari supabase status>"
+node scripts/seed-demo-users.mjs
+```
+
+Lalu jalankan app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka [http://localhost:3000](http://localhost:3000), masuk dengan salah satu akun demo
+(`owner.demo@madani88.local` / `apoteker.grl@madani88.local` / `apoteker.ngy@madani88.local`,
+password `Demo1234!`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Perubahan skema
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Jangan ubah database lewat Supabase Studio secara manual. Buat file migrasi baru:
 
-## Learn More
+```bash
+npx supabase migration new nama_perubahan
+```
 
-To learn more about Next.js, take a look at the following resources:
+lalu `npx supabase db reset` untuk menerapkan ulang semua migrasi + seed di database lokal.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Test
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm test
+```
 
-## Deploy on Vercel
+`tests/rbac.test.ts` murni logika (tanpa DB). `tests/harga-history.test.ts` butuh Supabase lokal
+yang jalan + `SUPABASE_ANON_KEY` di env — otomatis di-skip kalau belum ada.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Status
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Increment pertama: fondasi (schema semua tabel, auth, RBAC/RLS per outlet, audit log) + modul
+Produk penuh. Belum tersambung ke akun Supabase/GitHub asli — lihat `docs/keputusan.md`.
