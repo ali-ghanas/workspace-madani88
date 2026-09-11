@@ -1,7 +1,7 @@
 {
   "name": "Workspace Madani88",
   "short_name": "Madani88",
-  "start_url": "/produk",
+  "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#f6f8f6",
   "theme_color": "#17a24a",

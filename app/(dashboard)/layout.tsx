@@ -13,16 +13,28 @@ export default async function DashboardLayout({ children }: { children: React.Re
   }
 
   const navItems: NavItem[] = [
+    { href: "/dashboard", label: "Dashboard" },
+    { href: "/dashboard/profitabilitas", label: "Profitabilitas" },
+    { href: "/dashboard/channel", label: "Review Channel" },
+  ];
+
+  if (sesi.isOwner || punyaIzin(sesi, "kasir.tutup")) {
+    navItems.push({ href: "/kasir/tutup", label: "Tutup Shift" });
+  }
+
+  navItems.push(
     { href: "/produk", label: "Produk" },
     { href: "/supplier", label: "Supplier" },
     { href: "/pelanggan", label: "Pelanggan" },
-    { href: "/pegawai", label: "Pegawai" },
-  ];
+    { href: "/pegawai", label: "Pegawai" }
+  );
 
   if (sesi.isOwner || punyaIzin(sesi, "persetujuan.setujui")) {
     navItems.push({ href: "/persetujuan", label: "Persetujuan" });
   }
   if (sesi.isOwner) {
+    navItems.push({ href: "/dashboard/kasir", label: "Performa Kasir" });
+    navItems.push({ href: "/kasir/impor", label: "Impor Data" });
     navItems.push({ href: "/pengguna", label: "Pengguna" });
     navItems.push({ href: "/audit-log", label: "Audit Log" });
   }
@@ -52,7 +64,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
       <div className="flex flex-1 flex-col">
         <header className="flex items-center justify-between border-b border-border bg-card px-4 py-3 md:hidden">
-          <Link href="/produk" className="flex items-center gap-2">
+          <Link href="/dashboard" className="flex items-center gap-2">
             <Image src="/icons/icon-mark.png" alt="" width={28} height={28} className="h-7 w-7 rounded-md" />
             <span className="text-sm font-bold">Workspace Madani88</span>
           </Link>
