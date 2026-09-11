@@ -62,7 +62,16 @@ yang jalan + `SUPABASE_ANON_KEY` di env — otomatis di-skip kalau belum ada.
 ## Status
 
 Fondasi (schema semua tabel, auth, RBAC/RLS per outlet, audit log) + modul Produk, Supplier,
-Pelanggan, dan Pegawai (termasuk badge pengingat dokumen STR/SIP kedaluwarsa). Diverifikasi
-end-to-end lawan Supabase lokal. Belum tersambung ke akun Supabase/GitHub asli, belum ada UI
-antrean persetujuan penuh, dan pengingat dokumen masih badge di UI (belum notifikasi otomatis)
-— lihat `docs/keputusan.md`.
+Pelanggan, Pegawai (badge pengingat STR/SIP), Audit Log, Persetujuan (setujui/tolak pengajuan),
+dan Kelola Pengguna & Penugasan (undang pengguna baru + atur peran×outlet). Tema visual
+disamakan dengan dashboard keuangan Madani88 (ghanas.net). Semua diverifikasi end-to-end lawan
+Supabase lokal — bukan cuma ditulis dan diasumsikan benar.
+
+**Belum dikerjakan** (lihat `docs/keputusan.md` untuk detail & alasan):
+- Belum tersambung ke akun Supabase/GitHub/Vercel asli — masih 100% lokal
+- Master produk belum diimpor dari Farmacare (perlu file ekspornya dari owner)
+- Pengingat STR/SIP baru badge di UI, belum notifikasi email/WhatsApp otomatis
+- Backup & restore belum diuji di lingkungan Supabase hosting sungguhan (baru local dev)
+- Alur "ajukan" untuk harga jual (izin `harga.ajukan`, khusus APJ) belum ada UI-nya —
+  RLS sudah benar tapi belum ada APJ demo untuk diuji, dan belum ada halaman persetujuan
+  khusus harga (beda dari persetujuan produk)
