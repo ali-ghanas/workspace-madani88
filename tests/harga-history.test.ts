@@ -19,37 +19,25 @@ describe.skipIf(!canRun)("harga_produk — riwayat harga append-only", () => {
     });
     expect(signInError).toBeNull();
 
+    // Kode unik per run: tabel produk/harga_produk tidak punya cara dihapus lewat
+    // RLS (soft-delete only), jadi memakai kode tetap akan membuat riwayat harga
+    // dari run sebelumnya menumpuk dan bikin assertion di bawah gagal.
+    const kodeUnik = `TEST-HARGA-${Date.now()}`;
+
     const { data: produk } = await supabase
       .from("produk")
+      .insert({ kode: kodeUnik, nama_dagang: "Produk Uji Harga", golongan_obat: "bebas" })
       .select("id")
-      .eq("kode", "TEST-HARGA")
-      .maybeSingle();
-
-    const produkId =
-      produk?.id ??
-      (
-        await supabase
-          .from("produk")
-          .insert({ kode: "TEST-HARGA", nama_dagang: "Produk Uji Harga", golongan_obat: "bebas" })
-          .select("id")
-          .single()
-      ).data?.id;
+      .single();
+    const produkId = produk!.id;
 
     const { data: outlet } = await supabase.from("outlet").select("id").eq("kode", "GRL").single();
     const { data: satuan } = await supabase
       .from("satuan_produk")
+      .insert({ produk_id: produkId, nama_satuan: "Tablet", faktor_konversi: 1, adalah_satuan_dasar: true })
       .select("id")
-      .eq("produk_id", produkId)
-      .maybeSingle();
-    const satuanId =
-      satuan?.id ??
-      (
-        await supabase
-          .from("satuan_produk")
-          .insert({ produk_id: produkId, nama_satuan: "Tablet", faktor_konversi: 1, adalah_satuan_dasar: true })
-          .select("id")
-          .single()
-      ).data?.id;
+      .single();
+    const satuanId = satuan!.id;
 
     const { data: hargaLama } = await supabase
       .from("harga_produk")
@@ -63,11 +51,17 @@ describe.skipIf(!canRun)("harga_produk — riwayat harga append-only", () => {
       .select("id")
       .single();
 
-    const { error: updateError } = await supabase
+    // Tidak ada policy UPDATE untuk harga_produk (lihat migrasi 0008_rls.sql),
+    // jadi Postgres/PostgREST tidak melempar error — baris yang tidak lolos
+    // klausa RLS cuma tidak ikut ter-update (affected rows = 0). Yang penting
+    // diverifikasi adalah nilainya tetap utuh, bukan ada-tidaknya error.
+    await supabase.from("harga_produk").update({ harga: 9999 }).eq("id", hargaLama!.id);
+    const { data: hargaSetelahUpdate } = await supabase
       .from("harga_produk")
-      .update({ harga: 9999 })
-      .eq("id", hargaLama!.id);
-    expect(updateError).not.toBeNull();
+      .select("harga")
+      .eq("id", hargaLama!.id)
+      .single();
+    expect(hargaSetelahUpdate?.harga).toBe(1000);
 
     await supabase.from("harga_produk").insert({
       produk_id: produkId,

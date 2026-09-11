@@ -36,8 +36,11 @@ declare
     'entitas', 'outlet', 'pengguna', 'penugasan', 'pegawai', 'dokumen_pegawai',
     'produk', 'satuan_produk', 'stok_parameter', 'supplier', 'pelanggan', 'persetujuan'
   ];
+  -- peran_izin sengaja tidak diaudit di sini: tabel penghubung ini tidak
+  -- punya kolom id (primary key-nya gabungan peran_id+izin_id), dan
+  -- fn_audit_log() di atas mengasumsikan setiap tabel beraudit punya id.
   audited_tables text[] := array[
-    'entitas', 'outlet', 'pengguna', 'peran', 'peran_izin', 'penugasan',
+    'entitas', 'outlet', 'pengguna', 'peran', 'penugasan',
     'pegawai', 'dokumen_pegawai',
     'produk', 'satuan_produk', 'barcode_produk', 'harga_produk', 'stok_parameter',
     'supplier', 'pelanggan', 'persetujuan', 'periode'
