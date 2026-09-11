@@ -10,9 +10,9 @@ export default function SatuanForm({ produkId }: { produkId: string }) {
   );
 
   return (
-    <form action={formAction} className="flex flex-wrap items-end gap-2 border-t border-gray-100 pt-3">
+    <form action={formAction} className="flex flex-wrap items-end gap-2 border-t border-border pt-3">
       <div>
-        <label className="mb-1 block text-xs text-gray-500" htmlFor="nama_satuan">
+        <label className="mb-1 block text-xs text-muted-foreground" htmlFor="nama_satuan">
           Nama satuan
         </label>
         <input
@@ -20,11 +20,11 @@ export default function SatuanForm({ produkId }: { produkId: string }) {
           name="nama_satuan"
           required
           placeholder="mis. Box, Strip, Tablet"
-          className="w-40 rounded border border-gray-300 px-2 py-1.5 text-sm"
+          className="w-40 rounded-lg border border-border bg-input px-2 py-1.5 text-sm outline-none ring-primary/30 focus:ring-2"
         />
       </div>
       <div>
-        <label className="mb-1 block text-xs text-gray-500" htmlFor="faktor_konversi">
+        <label className="mb-1 block text-xs text-muted-foreground" htmlFor="faktor_konversi">
           Faktor konversi
         </label>
         <input
@@ -35,21 +35,21 @@ export default function SatuanForm({ produkId }: { produkId: string }) {
           min="0"
           required
           defaultValue={1}
-          className="w-28 rounded border border-gray-300 px-2 py-1.5 text-sm"
+          className="w-28 rounded-lg border border-border bg-input px-2 py-1.5 text-sm outline-none ring-primary/30 focus:ring-2"
         />
       </div>
-      <label className="flex items-center gap-1.5 pb-2 text-xs text-gray-600">
+      <label className="flex items-center gap-1.5 pb-2 text-xs text-muted-foreground">
         <input type="checkbox" name="adalah_satuan_dasar" className="h-3.5 w-3.5" />
         Satuan dasar
       </label>
       <button
         type="submit"
         disabled={pending}
-        className="rounded bg-gray-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
+        className="rounded-xl bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
       >
         Tambah
       </button>
-      {state?.error && <p className="w-full text-xs text-red-600">{state.error}</p>}
+      {state?.error && <p className="w-full text-xs text-destructive">{state.error}</p>}
     </form>
   );
 }

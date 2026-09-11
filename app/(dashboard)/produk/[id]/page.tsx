@@ -39,7 +39,7 @@ export default async function ProdukDetailPage({ params }: { params: Promise<{ i
       <div>
         <h1 className="text-xl font-semibold">
           {produk.nama_dagang}{" "}
-          <span className="text-sm font-normal text-gray-400">({produk.kode})</span>
+          <span className="text-sm font-normal text-muted-foreground">({produk.kode})</span>
         </h1>
         {produk.status_persetujuan === "pending" && (
           <p className="mt-1 text-sm text-amber-600">Perubahan terbaru menunggu persetujuan owner/APJ.</p>
@@ -47,39 +47,39 @@ export default async function ProdukDetailPage({ params }: { params: Promise<{ i
       </div>
 
       <section className="max-w-lg">
-        <h2 className="mb-2 text-sm font-semibold text-gray-700">Data produk</h2>
+        <h2 className="mb-2 text-sm font-semibold text-muted-foreground">Data produk</h2>
         <ProdukForm action={ubahProduk.bind(null, id)} produk={produk} submitLabel="Simpan perubahan" />
       </section>
 
-      <section className="rounded-lg border border-gray-200 bg-white p-5">
-        <h2 className="mb-2 text-sm font-semibold text-gray-700">Satuan bertingkat</h2>
-        <ul className="mb-1 text-sm text-gray-700">
+      <section className="rounded-xl border border-border bg-card p-5">
+        <h2 className="mb-2 text-sm font-semibold text-muted-foreground">Satuan bertingkat</h2>
+        <ul className="mb-1 text-sm text-muted-foreground">
           {(satuanList ?? []).map((s) => (
             <li key={s.id}>
               {s.nama_satuan} — faktor {s.faktor_konversi}
-              {s.adalah_satuan_dasar && <span className="ml-1 text-xs text-gray-400">(satuan dasar)</span>}
+              {s.adalah_satuan_dasar && <span className="ml-1 text-xs text-muted-foreground">(satuan dasar)</span>}
             </li>
           ))}
-          {(satuanList ?? []).length === 0 && <li className="text-gray-400">Belum ada satuan.</li>}
+          {(satuanList ?? []).length === 0 && <li className="text-muted-foreground">Belum ada satuan.</li>}
         </ul>
         <SatuanForm produkId={id} />
       </section>
 
-      <section className="rounded-lg border border-gray-200 bg-white p-5">
-        <h2 className="mb-2 text-sm font-semibold text-gray-700">Barcode</h2>
-        <ul className="mb-1 text-sm text-gray-700">
+      <section className="rounded-xl border border-border bg-card p-5">
+        <h2 className="mb-2 text-sm font-semibold text-muted-foreground">Barcode</h2>
+        <ul className="mb-1 text-sm text-muted-foreground">
           {(barcodeList ?? []).map((b) => (
             <li key={b.id}>{b.barcode}</li>
           ))}
-          {(barcodeList ?? []).length === 0 && <li className="text-gray-400">Belum ada barcode.</li>}
+          {(barcodeList ?? []).length === 0 && <li className="text-muted-foreground">Belum ada barcode.</li>}
         </ul>
         <BarcodeForm produkId={id} />
       </section>
 
-      <section className="rounded-lg border border-gray-200 bg-white p-5">
-        <h2 className="mb-2 text-sm font-semibold text-gray-700">Harga per outlet (riwayat)</h2>
+      <section className="rounded-xl border border-border bg-card p-5">
+        <h2 className="mb-2 text-sm font-semibold text-muted-foreground">Harga per outlet (riwayat)</h2>
         <table className="mb-1 w-full text-sm">
-          <thead className="text-left text-gray-500">
+          <thead className="text-left text-muted-foreground">
             <tr>
               <th className="py-1 font-medium">Outlet</th>
               <th className="py-1 font-medium">Satuan</th>
@@ -92,7 +92,7 @@ export default async function ProdukDetailPage({ params }: { params: Promise<{ i
               const outlet = h.outlet as unknown as { kode: string; nama: string } | null;
               const satuan = h.satuan as unknown as { nama_satuan: string } | null;
               return (
-                <tr key={h.id} className="border-t border-gray-100">
+                <tr key={h.id} className="border-t border-border">
                   <td className="py-1">{outlet?.kode}</td>
                   <td className="py-1">{satuan?.nama_satuan}</td>
                   <td className="py-1">Rp {Number(h.harga).toLocaleString("id-ID")}</td>
@@ -102,7 +102,7 @@ export default async function ProdukDetailPage({ params }: { params: Promise<{ i
             })}
             {(hargaList ?? []).length === 0 && (
               <tr>
-                <td colSpan={4} className="py-2 text-gray-400">
+                <td colSpan={4} className="py-2 text-muted-foreground">
                   Belum ada harga.
                 </td>
               </tr>

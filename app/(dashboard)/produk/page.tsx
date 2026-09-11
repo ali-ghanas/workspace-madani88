@@ -26,17 +26,17 @@ export default async function ProdukListPage() {
         <h1 className="text-xl font-semibold">Produk</h1>
         <Link
           href="/produk/baru"
-          className="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white"
+          className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
         >
           + Tambah produk
         </Link>
       </div>
 
-      {error && <p className="text-sm text-red-600">Gagal memuat produk: {error.message}</p>}
+      {error && <p className="text-sm text-destructive">Gagal memuat produk: {error.message}</p>}
 
-      <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50 text-left text-gray-500">
+          <thead className="bg-muted text-left text-muted-foreground">
             <tr>
               <th className="px-4 py-2 font-medium">Kode</th>
               <th className="px-4 py-2 font-medium">Nama dagang</th>
@@ -47,16 +47,16 @@ export default async function ProdukListPage() {
           </thead>
           <tbody>
             {(produkList ?? []).map((p) => (
-              <tr key={p.id} className="border-t border-gray-100 hover:bg-gray-50">
+              <tr key={p.id} className="border-t border-border hover:bg-accent/40">
                 <td className="px-4 py-2">
-                  <Link href={`/produk/${p.id}`} className="font-medium text-gray-900 hover:underline">
+                  <Link href={`/produk/${p.id}`} className="font-medium text-foreground hover:underline">
                     {p.kode}
                   </Link>
                 </td>
                 <td className="px-4 py-2">
                   {p.nama_dagang}
                   {!p.status_aktif && (
-                    <span className="ml-2 rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-500">
+                    <span className="ml-2 rounded-md bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
                       nonaktif
                     </span>
                   )}
@@ -65,11 +65,11 @@ export default async function ProdukListPage() {
                 <td className="px-4 py-2">{p.wajib_resep ? "Ya" : "Tidak"}</td>
                 <td className="px-4 py-2">
                   {p.status_persetujuan === "pending" ? (
-                    <span className="rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-700">
+                    <span className="rounded-md bg-warning/10 px-1.5 py-0.5 text-xs font-medium text-warning">
                       menunggu persetujuan
                     </span>
                   ) : (
-                    <span className="rounded bg-green-100 px-1.5 py-0.5 text-xs text-green-700">
+                    <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-xs font-medium text-primary">
                       disetujui
                     </span>
                   )}
@@ -78,7 +78,7 @@ export default async function ProdukListPage() {
             ))}
             {(produkList ?? []).length === 0 && !error && (
               <tr>
-                <td colSpan={5} className="px-4 py-6 text-center text-gray-400">
+                <td colSpan={5} className="px-4 py-6 text-center text-muted-foreground">
                   Belum ada produk.
                 </td>
               </tr>

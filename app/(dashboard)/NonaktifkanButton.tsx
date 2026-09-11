@@ -21,7 +21,7 @@ export default function NonaktifkanButton({
   const [error, setError] = useState<string | null>(null);
 
   if (!statusAktif) {
-    return <span className="text-sm text-gray-400">Sudah nonaktif</span>;
+    return <span className="text-sm text-muted-foreground">Sudah nonaktif</span>;
   }
 
   return (
@@ -40,11 +40,11 @@ export default function NonaktifkanButton({
             }
           });
         }}
-        className="rounded border border-red-200 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
+        className="rounded-lg border border-destructive/30 px-3 py-1.5 text-sm font-medium text-destructive hover:bg-destructive/10 disabled:opacity-50"
       >
         {pending ? "Memproses..." : label}
       </button>
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
     </div>
   );
 }

@@ -14,7 +14,10 @@ export default function SignOutButton() {
   }
 
   return (
-    <button onClick={handleSignOut} className="text-sm text-gray-500 hover:text-gray-900">
+    <button
+      onClick={handleSignOut}
+      className="text-sm font-medium text-muted-foreground hover:text-destructive"
+    >
       Keluar
     </button>
   );

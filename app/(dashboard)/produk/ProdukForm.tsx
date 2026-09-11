@@ -35,7 +35,7 @@ export default function ProdukForm({
   const [state, formAction, pending] = useActionState<ActionState, FormData>(action, null);
 
   return (
-    <form action={formAction} className="space-y-4 rounded-lg border border-gray-200 bg-white p-5">
+    <form action={formAction} className="space-y-4 rounded-xl border border-border bg-card p-5">
       {!produk && (
         <div>
           <label className="mb-1 block text-sm font-medium" htmlFor="kode">
@@ -45,7 +45,7 @@ export default function ProdukForm({
             id="kode"
             name="kode"
             required
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+            className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none ring-primary/30 focus:ring-2"
           />
         </div>
       )}
@@ -59,7 +59,7 @@ export default function ProdukForm({
           name="nama_dagang"
           required
           defaultValue={produk?.nama_dagang}
-          className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none ring-primary/30 focus:ring-2"
         />
       </div>
 
@@ -71,7 +71,7 @@ export default function ProdukForm({
           id="zat_aktif"
           name="zat_aktif"
           defaultValue={produk?.zat_aktif ?? ""}
-          className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none ring-primary/30 focus:ring-2"
         />
       </div>
 
@@ -83,7 +83,7 @@ export default function ProdukForm({
           id="kategori"
           name="kategori"
           defaultValue={produk?.kategori ?? ""}
-          className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none ring-primary/30 focus:ring-2"
         />
       </div>
 
@@ -96,7 +96,7 @@ export default function ProdukForm({
           name="golongan_obat"
           required
           defaultValue={produk?.golongan_obat ?? ""}
-          className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none ring-primary/30 focus:ring-2"
         >
           <option value="" disabled>
             Pilih golongan
@@ -122,12 +122,12 @@ export default function ProdukForm({
         </label>
       </div>
 
-      {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
+      {state?.error && <p className="text-sm text-destructive">{state.error}</p>}
 
       <button
         type="submit"
         disabled={pending}
-        className="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+        className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
       >
         {pending ? "Menyimpan..." : submitLabel}
       </button>

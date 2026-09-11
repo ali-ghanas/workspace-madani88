@@ -16,9 +16,9 @@ const JENIS_LABEL: Record<string, string> = {
 };
 
 const BADGE_KEDALUWARSA: Record<string, string> = {
-  kedaluwarsa: "bg-red-100 text-red-700",
-  segera: "bg-amber-100 text-amber-700",
-  aman: "bg-green-100 text-green-700",
+  kedaluwarsa: "bg-destructive/10 text-destructive",
+  segera: "bg-warning/10 text-warning",
+  aman: "bg-primary/10 text-primary",
 };
 
 export default async function PegawaiDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -45,7 +45,7 @@ export default async function PegawaiDetailPage({ params }: { params: Promise<{ 
       <h1 className="text-xl font-semibold">{pegawai.nama}</h1>
 
       <section className="max-w-lg">
-        <h2 className="mb-2 text-sm font-semibold text-gray-700">Data pegawai</h2>
+        <h2 className="mb-2 text-sm font-semibold text-muted-foreground">Data pegawai</h2>
         <PegawaiForm
           action={ubahPegawai.bind(null, id)}
           pegawai={pegawai}
@@ -54,9 +54,9 @@ export default async function PegawaiDetailPage({ params }: { params: Promise<{ 
         />
       </section>
 
-      <section className="rounded-lg border border-gray-200 bg-white p-5">
-        <h2 className="mb-2 text-sm font-semibold text-gray-700">Dokumen (KTP, STR, SIPA, SIPTTK, kontrak)</h2>
-        <ul className="mb-1 space-y-1 text-sm text-gray-700">
+      <section className="rounded-xl border border-border bg-card p-5">
+        <h2 className="mb-2 text-sm font-semibold text-muted-foreground">Dokumen (KTP, STR, SIPA, SIPTTK, kontrak)</h2>
+        <ul className="mb-1 space-y-1 text-sm text-muted-foreground">
           {(dokumenList ?? []).map((d) => {
             const status = statusKedaluwarsa(d.tanggal_kedaluwarsa);
             return (
@@ -74,7 +74,7 @@ export default async function PegawaiDetailPage({ params }: { params: Promise<{ 
               </li>
             );
           })}
-          {(dokumenList ?? []).length === 0 && <li className="text-gray-400">Belum ada dokumen.</li>}
+          {(dokumenList ?? []).length === 0 && <li className="text-muted-foreground">Belum ada dokumen.</li>}
         </ul>
         <DokumenForm pegawaiId={id} />
       </section>

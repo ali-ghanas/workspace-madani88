@@ -22,16 +22,16 @@ export default function HargaForm({
   const disabled = outletOptions.length === 0 || satuanOptions.length === 0;
 
   return (
-    <form action={formAction} className="flex flex-wrap items-end gap-2 border-t border-gray-100 pt-3">
+    <form action={formAction} className="flex flex-wrap items-end gap-2 border-t border-border pt-3">
       <div>
-        <label className="mb-1 block text-xs text-gray-500" htmlFor="outlet_id">
+        <label className="mb-1 block text-xs text-muted-foreground" htmlFor="outlet_id">
           Outlet
         </label>
         <select
           id="outlet_id"
           name="outlet_id"
           required
-          className="w-40 rounded border border-gray-300 px-2 py-1.5 text-sm"
+          className="w-40 rounded-lg border border-border bg-input px-2 py-1.5 text-sm outline-none ring-primary/30 focus:ring-2"
         >
           {outletOptions.map((o) => (
             <option key={o.id} value={o.id}>
@@ -41,14 +41,14 @@ export default function HargaForm({
         </select>
       </div>
       <div>
-        <label className="mb-1 block text-xs text-gray-500" htmlFor="satuan_produk_id">
+        <label className="mb-1 block text-xs text-muted-foreground" htmlFor="satuan_produk_id">
           Satuan
         </label>
         <select
           id="satuan_produk_id"
           name="satuan_produk_id"
           required
-          className="w-32 rounded border border-gray-300 px-2 py-1.5 text-sm"
+          className="w-32 rounded-lg border border-border bg-input px-2 py-1.5 text-sm outline-none ring-primary/30 focus:ring-2"
         >
           {satuanOptions.map((o) => (
             <option key={o.id} value={o.id}>
@@ -58,7 +58,7 @@ export default function HargaForm({
         </select>
       </div>
       <div>
-        <label className="mb-1 block text-xs text-gray-500" htmlFor="harga">
+        <label className="mb-1 block text-xs text-muted-foreground" htmlFor="harga">
           Harga (Rp)
         </label>
         <input
@@ -68,11 +68,11 @@ export default function HargaForm({
           min="0"
           step="1"
           required
-          className="w-28 rounded border border-gray-300 px-2 py-1.5 text-sm"
+          className="w-28 rounded-lg border border-border bg-input px-2 py-1.5 text-sm outline-none ring-primary/30 focus:ring-2"
         />
       </div>
       <div>
-        <label className="mb-1 block text-xs text-gray-500" htmlFor="berlaku_mulai">
+        <label className="mb-1 block text-xs text-muted-foreground" htmlFor="berlaku_mulai">
           Berlaku mulai
         </label>
         <input
@@ -81,20 +81,20 @@ export default function HargaForm({
           type="date"
           required
           defaultValue={new Date().toISOString().slice(0, 10)}
-          className="rounded border border-gray-300 px-2 py-1.5 text-sm"
+          className="rounded-lg border border-border bg-input px-2 py-1.5 text-sm outline-none ring-primary/30 focus:ring-2"
         />
       </div>
       <button
         type="submit"
         disabled={pending || disabled}
-        className="rounded bg-gray-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50"
+        className="rounded-xl bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
       >
         Simpan harga
       </button>
       {disabled && (
         <p className="w-full text-xs text-amber-600">Tambahkan satuan produk dulu sebelum mengisi harga.</p>
       )}
-      {state?.error && <p className="w-full text-xs text-red-600">{state.error}</p>}
+      {state?.error && <p className="w-full text-xs text-destructive">{state.error}</p>}
     </form>
   );
 }

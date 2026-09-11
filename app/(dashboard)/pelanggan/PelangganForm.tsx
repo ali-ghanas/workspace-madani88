@@ -22,7 +22,7 @@ export default function PelangganForm({
   const [state, formAction, pending] = useActionState<ActionState, FormData>(action, null);
 
   return (
-    <form action={formAction} className="space-y-4 rounded-lg border border-gray-200 bg-white p-5">
+    <form action={formAction} className="space-y-4 rounded-xl border border-border bg-card p-5">
       <div>
         <label className="mb-1 block text-sm font-medium" htmlFor="nama">
           Nama
@@ -32,7 +32,7 @@ export default function PelangganForm({
           name="nama"
           required
           defaultValue={pelanggan?.nama}
-          className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none ring-primary/30 focus:ring-2"
         />
       </div>
 
@@ -44,7 +44,7 @@ export default function PelangganForm({
           id="no_hp"
           name="no_hp"
           defaultValue={pelanggan?.no_hp ?? ""}
-          className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none ring-primary/30 focus:ring-2"
         />
       </div>
 
@@ -57,7 +57,7 @@ export default function PelangganForm({
           name="tanggal_lahir"
           type="date"
           defaultValue={pelanggan?.tanggal_lahir ?? ""}
-          className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none ring-primary/30 focus:ring-2"
         />
       </div>
 
@@ -74,12 +74,12 @@ export default function PelangganForm({
         </label>
       </div>
 
-      {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
+      {state?.error && <p className="text-sm text-destructive">{state.error}</p>}
 
       <button
         type="submit"
         disabled={pending}
-        className="rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+        className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
       >
         {pending ? "Menyimpan..." : submitLabel}
       </button>

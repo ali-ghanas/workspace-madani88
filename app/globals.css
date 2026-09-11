@@ -1,24 +1,92 @@
 @import "tailwindcss";
 
+/* Tema disamakan dengan dashboard keuangan Madani88 (ghanas.net) — token warna
+   diambil langsung dari CSS custom properties situs itu supaya identik. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --radius: 0.75rem;
+  --background: #f6f8f6;
+  --foreground: #14261a;
+  --card: #ffffff;
+  --card-foreground: #14261a;
+  --popover: #ffffff;
+  --popover-foreground: #14261a;
+  --primary: #17a24a;
+  --primary-foreground: #ffffff;
+  --secondary: #eaf3ec;
+  --secondary-foreground: #14261a;
+  --muted: #eef2ef;
+  --muted-foreground: #5c6b60;
+  --accent: #e6f2e9;
+  --accent-foreground: #0f3d21;
+  --destructive: #e0271f;
+  --destructive-foreground: #ffffff;
+  --border: #dbe4dd;
+  --input: #ffffff;
+  --ring: #17a24a;
+  --sidebar: #ffffff;
+  --warning: #b45309;
+  --warning-foreground: #fffbeb;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0b120e;
+    --foreground: #e8f2ea;
+    --card: #121b16;
+    --card-foreground: #f2f8f3;
+    --popover: #16211b;
+    --popover-foreground: #f2f8f3;
+    --primary: #29b356;
+    --primary-foreground: #04170a;
+    --secondary: #1b2a21;
+    --secondary-foreground: #e8f2ea;
+    --muted: #16211b;
+    --muted-foreground: #9db3a5;
+    --accent: #1c2d23;
+    --accent-foreground: #f2f8f3;
+    --destructive: #f4574f;
+    --destructive-foreground: #1a0505;
+    --border: #23342a;
+    --input: #1d2c24;
+    --ring: #29b356;
+    --sidebar: #0e1611;
+    --warning: #fbbf24;
+    --warning-foreground: #1a1203;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }

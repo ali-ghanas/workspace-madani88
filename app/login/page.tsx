@@ -31,13 +31,23 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center px-4">
+    <div className="flex flex-1 flex-col items-center justify-center px-4">
+      <div className="mb-6 flex flex-col items-center gap-2">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-lg font-extrabold text-primary-foreground">
+          M88
+        </div>
+        <div className="text-center">
+          <div className="text-lg font-bold leading-tight">Workspace Madani88</div>
+          <div className="text-xs text-muted-foreground">Core system &amp; master data</div>
+        </div>
+      </div>
+
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
+        className="w-full max-w-sm rounded-xl border border-border bg-card p-6 shadow-sm"
       >
-        <h1 className="mb-1 text-lg font-semibold">Workspace Madani88</h1>
-        <p className="mb-6 text-sm text-gray-500">Masuk dengan akun yang terdaftar.</p>
+        <h1 className="mb-1 text-base font-semibold">Masuk</h1>
+        <p className="mb-6 text-sm text-muted-foreground">Masuk dengan akun yang terdaftar.</p>
 
         <label className="mb-1 block text-sm font-medium" htmlFor="email">
           Email
@@ -49,7 +59,7 @@ export default function LoginPage() {
           autoComplete="username"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mb-4 w-full rounded border border-gray-300 px-3 py-2 text-sm"
+          className="mb-4 w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none ring-primary/30 focus:ring-2"
         />
 
         <label className="mb-1 block text-sm font-medium" htmlFor="password">
@@ -62,15 +72,15 @@ export default function LoginPage() {
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mb-4 w-full rounded border border-gray-300 px-3 py-2 text-sm"
+          className="mb-4 w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none ring-primary/30 focus:ring-2"
         />
 
-        {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
+        {error && <p className="mb-4 text-sm text-destructive">{error}</p>}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+          className="w-full rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
         >
           {loading ? "Memproses..." : "Masuk"}
         </button>

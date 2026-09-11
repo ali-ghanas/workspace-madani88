@@ -5,7 +5,7 @@ create table audit_log (
   aksi text not null check (aksi in ('insert', 'update', 'delete')),
   nilai_lama jsonb,
   nilai_baru jsonb,
-  pengguna_id uuid,
+  pengguna_id uuid references pengguna(id),
   waktu timestamptz not null default now()
 );
 
