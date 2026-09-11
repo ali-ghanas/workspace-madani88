@@ -173,53 +173,62 @@ export async function imporInputKK(_prev: ImportActionState, formData: FormData)
   let masuk = 0;
   let dilewati = 0;
 
-  for (const b of baris) {
+  // Baris baru saja (bukan yang sudah ada) — di-insert per batch, bukan satu-satu,
+  // supaya tidak timeout untuk file besar (ratusan baris = 1 request HTTP kalau
+  // satu-satu, ini bisa jauh melebihi batas waktu function di Vercel).
+  const barisBaru = baris.filter((b) => {
     const outletId = outletByKode.get(b.outletKode);
-    if (!outletId) continue;
+    if (!outletId) return false;
     const key = `${b.tanggal}|${outletId}|${b.shift}|${b.kasirNama}`;
     if (existingKeys.has(key)) {
       dilewati++;
-      continue;
+      return false;
     }
+    existingKeys.add(key); // cegah duplikat kalau file punya baris identik lebih dari satu
+    return true;
+  });
 
-    // Pakai nilai "Selisih" dari sumber kalau ada (rekonsiliasi setoran vs tunai,
-    // bukan vs total penjualan — nontunai tidak lewat tangan kasir). Fallback hitung
-    // sendiri kalau kolomnya tidak ada di file.
-    const selisih = b.selisih ?? b.setoran - b.tunai;
-    const { data: shiftBaru, error: insertError } = await supabase
+  const UKURAN_BATCH = 100;
+  for (let i = 0; i < barisBaru.length; i += UKURAN_BATCH) {
+    const batch = barisBaru.slice(i, i + UKURAN_BATCH);
+    const { data: shiftBaruList, error: insertError } = await supabase
       .from("shift_kasir")
-      .insert({
-        tanggal: b.tanggal,
-        outlet_id: outletId,
-        shift: b.shift,
-        kasir_nama: b.kasirNama,
-        jumlah_transaksi: b.jumlahTransaksi,
-        cd: b.cd,
-        tunai: b.tunai,
-        total_nontunai: b.totalNontunai,
-        total_penjualan: b.totalPenjualan,
-        setoran: b.setoran,
-        selisih,
-        hpp: b.hpp,
-        catatan: b.catatan,
-        dibuat_oleh: sesi!.penggunaId,
-      })
-      .select("id")
-      .single();
+      .insert(
+        batch.map((b) => ({
+          tanggal: b.tanggal,
+          outlet_id: outletByKode.get(b.outletKode),
+          shift: b.shift,
+          kasir_nama: b.kasirNama,
+          jumlah_transaksi: b.jumlahTransaksi,
+          cd: b.cd,
+          tunai: b.tunai,
+          total_nontunai: b.totalNontunai,
+          total_penjualan: b.totalPenjualan,
+          setoran: b.setoran,
+          // Pakai nilai "Selisih" dari sumber kalau ada (rekonsiliasi setoran vs
+          // tunai, bukan vs total penjualan — nontunai tidak lewat tangan kasir).
+          selisih: b.selisih ?? b.setoran - b.tunai,
+          hpp: b.hpp,
+          catatan: b.catatan,
+          dibuat_oleh: sesi!.penggunaId,
+        }))
+      )
+      .select("id");
 
     if (insertError) {
-      errors.push(`${b.tanggal} ${b.outletKode} ${b.shift} ${b.kasirNama}: ${insertError.message}`);
+      errors.push(`Batch baris ${i + 1}-${i + batch.length}: ${insertError.message}`);
       continue;
     }
 
-    if (b.channels.length > 0) {
-      await supabase
-        .from("pembayaran_shift")
-        .insert(b.channels.map((c) => ({ ...c, shift_kasir_id: shiftBaru.id })));
+    const pembayaranBatch = batch.flatMap((b, j) =>
+      b.channels.map((c) => ({ ...c, shift_kasir_id: shiftBaruList[j].id }))
+    );
+    if (pembayaranBatch.length > 0) {
+      const { error: pembayaranError } = await supabase.from("pembayaran_shift").insert(pembayaranBatch);
+      if (pembayaranError) errors.push(`Breakdown channel batch ${i + 1}-${i + batch.length}: ${pembayaranError.message}`);
     }
 
-    existingKeys.add(key);
-    masuk++;
+    masuk += batch.length;
   }
 
   // Sheet "Rekap Pembelian Harian" (opsional — kalau ada di file yang sama).
