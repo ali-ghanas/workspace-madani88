@@ -1,18 +1,29 @@
 import { createClient } from "@/lib/supabase/server";
-import { awalBulanWib, formatRupiah } from "@/lib/tanggal-wib";
+import { rentangBulan, formatRupiah } from "@/lib/tanggal-wib";
+import BulanPicker from "../BulanPicker";
 
 const SHIFT_LABEL: Record<string, string> = { pagi: "Pagi", siang: "Siang", sore: "Sore" };
 
-export default async function ProfitabilitasPage() {
+export default async function ProfitabilitasPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ bulan?: string }>;
+}) {
+  const { bulan: bulanParam } = await searchParams;
+  const { awal, akhir, label } = rentangBulan(bulanParam);
   const supabase = await createClient();
-  const awalBulan = awalBulanWib(0);
 
   const [{ data: shiftData, error: shiftError }, { data: pembelianData }] = await Promise.all([
     supabase
       .from("shift_kasir")
       .select("outlet_id, shift, total_penjualan, hpp, outlet:outlet_id(kode, nama)")
-      .gte("tanggal", awalBulan),
-    supabase.from("pembelian_harian").select("outlet_id, jumlah, outlet:outlet_id(kode)").gte("tanggal", awalBulan),
+      .gte("tanggal", awal)
+      .lt("tanggal", akhir),
+    supabase
+      .from("pembelian_harian")
+      .select("outlet_id, jumlah, outlet:outlet_id(kode)")
+      .gte("tanggal", awal)
+      .lt("tanggal", akhir),
   ]);
 
   type Row = { key: string; outletKode: string; outletNama: string; shift: string; omzet: number; hpp: number };
@@ -54,9 +65,12 @@ export default async function ProfitabilitasPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold">Profitabilitas</h1>
-        <p className="text-sm text-muted-foreground">Bulan berjalan, sejak {awalBulan}.</p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-semibold">Profitabilitas</h1>
+          <p className="text-sm text-muted-foreground">Periode {label}.</p>
+        </div>
+        <BulanPicker bulan={label} />
       </div>
 
       {shiftError && <p className="text-sm text-destructive">Gagal memuat data: {shiftError.message}</p>}

@@ -1,16 +1,23 @@
 import { createClient } from "@/lib/supabase/server";
-import { awalBulanWib, formatRupiah } from "@/lib/tanggal-wib";
+import { rentangBulan, formatRupiah } from "@/lib/tanggal-wib";
+import BulanPicker from "../BulanPicker";
 
-export default async function ReviewChannelPage() {
+export default async function ReviewChannelPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ bulan?: string }>;
+}) {
+  const { bulan: bulanParam } = await searchParams;
+  const { awal, akhir, label } = rentangBulan(bulanParam);
   const supabase = await createClient();
-  const awalBulan = awalBulanWib(0);
 
   const [{ data: pembayaranData, error }, { data: shiftData }] = await Promise.all([
     supabase
       .from("pembayaran_shift")
       .select("channel, sub_channel, jumlah, shift_kasir!inner(tanggal)")
-      .gte("shift_kasir.tanggal", awalBulan),
-    supabase.from("shift_kasir").select("tunai").gte("tanggal", awalBulan),
+      .gte("shift_kasir.tanggal", awal)
+      .lt("shift_kasir.tanggal", akhir),
+    supabase.from("shift_kasir").select("tunai").gte("tanggal", awal).lt("tanggal", akhir),
   ]);
 
   const perChannel = new Map<string, number>();
@@ -29,9 +36,12 @@ export default async function ReviewChannelPage() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-xl font-semibold">Review Channel Pembayaran</h1>
-        <p className="text-sm text-muted-foreground">Bulan berjalan, sejak {awalBulan}.</p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-semibold">Review Channel Pembayaran</h1>
+          <p className="text-sm text-muted-foreground">Periode {label}.</p>
+        </div>
+        <BulanPicker bulan={label} />
       </div>
 
       {error && <p className="text-sm text-destructive">Gagal memuat data: {error.message}</p>}

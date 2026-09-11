@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import { awalBulanWib, formatRupiah } from "@/lib/tanggal-wib";
+import { rentangBulan, formatRupiah } from "@/lib/tanggal-wib";
+import BulanPicker from "./BulanPicker";
 
 type BarisShift = {
   tanggal: string;
@@ -9,14 +10,20 @@ type BarisShift = {
   outlet: { kode: string; nama: string } | null;
 };
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ bulan?: string }>;
+}) {
+  const { bulan: bulanParam } = await searchParams;
+  const { awal, akhir, label } = rentangBulan(bulanParam);
   const supabase = await createClient();
-  const awalBulan = awalBulanWib(0);
 
   const { data, error } = await supabase
     .from("shift_kasir")
     .select("tanggal, total_penjualan, hpp, jumlah_transaksi, outlet:outlet_id(kode, nama)")
-    .gte("tanggal", awalBulan)
+    .gte("tanggal", awal)
+    .lt("tanggal", akhir)
     .order("tanggal", { ascending: true });
 
   const rows = (data ?? []) as unknown as BarisShift[];
@@ -46,9 +53,12 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold">Dashboard KPI</h1>
-        <p className="text-sm text-muted-foreground">Bulan berjalan, sejak {awalBulan}.</p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-semibold">Dashboard KPI</h1>
+          <p className="text-sm text-muted-foreground">Periode {label}.</p>
+        </div>
+        <BulanPicker bulan={label} />
       </div>
 
       {error && <p className="text-sm text-destructive">Gagal memuat data: {error.message}</p>}

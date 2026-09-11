@@ -1,8 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
 import { getSesiPengguna } from "@/lib/auth/session";
-import { awalBulanWib, formatRupiah } from "@/lib/tanggal-wib";
+import { rentangBulan, formatRupiah } from "@/lib/tanggal-wib";
+import BulanPicker from "../BulanPicker";
 
-export default async function PerformaKasirPage() {
+export default async function PerformaKasirPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ bulan?: string }>;
+}) {
   const sesi = await getSesiPengguna();
 
   if (!sesi?.isOwner) {
@@ -13,13 +18,15 @@ export default async function PerformaKasirPage() {
     );
   }
 
+  const { bulan: bulanParam } = await searchParams;
+  const { awal, akhir, label } = rentangBulan(bulanParam);
   const supabase = await createClient();
-  const awalBulan = awalBulanWib(0);
 
   const { data, error } = await supabase
     .from("shift_kasir")
     .select("kasir_nama, outlet:outlet_id(kode), total_penjualan, selisih")
-    .gte("tanggal", awalBulan);
+    .gte("tanggal", awal)
+    .lt("tanggal", akhir);
 
   type Row = { nama: string; outlet: string; jumlahShift: number; totalOmzet: number; totalSelisih: number };
   const perKasir = new Map<string, Row>();
@@ -48,12 +55,15 @@ export default async function PerformaKasirPage() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-xl font-semibold">Performa Kasir</h1>
-        <p className="text-sm text-muted-foreground">
-          Bulan berjalan, sejak {awalBulan}. Skor risiko fraud (CUSUM/Benford/dst) belum dibangun
-          di pass ini — lihat docs/keputusan.md.
-        </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-semibold">Performa Kasir</h1>
+          <p className="text-sm text-muted-foreground">
+            Periode {label}. Skor risiko fraud (CUSUM/Benford/dst) belum dibangun di pass ini —
+            lihat docs/keputusan.md.
+          </p>
+        </div>
+        <BulanPicker bulan={label} />
       </div>
 
       {error && <p className="text-sm text-destructive">Gagal memuat data: {error.message}</p>}
