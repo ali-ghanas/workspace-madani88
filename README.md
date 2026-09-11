@@ -1,5 +1,7 @@
 # Workspace Madani88
 
+**Live:** [workspace-madani88.vercel.app](https://workspace-madani88.vercel.app) · repo: [github.com/ali-ghanas/workspace-madani88](https://github.com/ali-ghanas/workspace-madani88) · database: Supabase project `bvoviwmshirdmaoafzvg` (Singapore)
+
 Core system & master data untuk Apotek Madani88 (3 outlet: Greenland, Nagoya, KDA). Lihat
 [docs/architecture/Arsitektur_Fase1_Workspace_Madani88.md](docs/architecture/Arsitektur_Fase1_Workspace_Madani88.md)
 untuk konteks & keputusan arsitektur, dan [docs/keputusan.md](docs/keputusan.md) untuk log keputusan.
@@ -69,8 +71,10 @@ dan Kelola Pengguna & Penugasan (undang pengguna baru + atur peran×outlet). Tem
 disamakan dengan dashboard keuangan Madani88 (ghanas.net). Semua diverifikasi end-to-end lawan
 Supabase lokal — bukan cuma ditulis dan diasumsikan benar.
 
+**Sudah live di production** (GitHub + Supabase + Vercel asli, lihat `docs/keputusan.md` untuk
+detail langkahnya). Owner asli: `ghanas@gmail.com`.
+
 **Belum dikerjakan** (lihat `docs/keputusan.md` untuk detail & alasan):
-- Belum tersambung ke akun Supabase/GitHub/Vercel asli — masih 100% lokal
 - Master produk belum diimpor dari Farmacare (perlu file ekspornya dari owner)
 - Pengingat STR/SIP baru badge di UI, belum notifikasi email/WhatsApp otomatis
 - Backup & restore belum diuji di lingkungan Supabase hosting sungguhan (baru local dev)
